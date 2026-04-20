@@ -65,18 +65,21 @@ with st.spinner("Loading Models..."):
 # Streamlit App Configuration
 #----------------------------------------------------------------------
 
+st.title("🗑️ Garbage Image Classifier")
+st.markdown("Upload an image to classify the type of garbage.")
+
 with st.container():
-    st.title("Classify what type of garbage it is")
     with st.form("Garbage Classification Form"):
         image_file = st.file_uploader(
-            "Image",
-            type=["jpg", "jpeg", "png"]
+            "Choose an image file",
+            type=["jpg", "jpeg", "png"],
+            help="Supported formats: JPG, JPEG, PNG"
         )
+        submit_button = st.form_submit_button(label="🔍 Classify Garbage")
 
-        submit_button = st.form_submit_button(label="Identify Garbage")
-
-    if submit_button:
-        if image_file is not None:
+if submit_button:
+    if image_file is not None:
+        with st.spinner("Classifying..."):
             img = Image.open(image_file)
             img_resized = img.resize((180, 180))
             img_array = np.array(img_resized)
@@ -90,13 +93,22 @@ with st.container():
                 pred_label = class_names[y_pred]
                 predictions.append(pred_label)
 
-            col1, col2 = st.columns(2, border=True)
+        col1, col2 = st.columns([1, 1], gap="large")
 
-            with col1:
-                st.image(image_file)
+        with col1:
+            st.subheader("Uploaded Image")
+            st.image(image_file)
 
-            with col2:
-                st.write(predictions[0])
+        with col2:
+            st.subheader("Classification Result")
+            st.success(f"Predicted: **{predictions[0]}**")
+            # Optional: Display top predictions or confidence if available
+            # For example, if prediction is probabilities:
+            # probs = prediction[0]
+            # top_indices = np.argsort(probs)[-3:][::-1]  # Top 3
+            # st.write("Top Predictions:")
+            # for i in top_indices:
+            #     st.write(f"{class_names[i]}: {probs[i]*100:.2f}%")
 
-        else:
-            st.warning("Add an image to classify")
+    else:
+        st.error("Please upload an image to classify.")

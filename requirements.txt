@@ -1,0 +1,12 @@
+streamlit
+tensorflow
+numpy
+pillow
+python-dotenv
+dagshub
+mlflow
+matplotlib
+scikit-learn
+seaborn
+opencv-python
+notebook

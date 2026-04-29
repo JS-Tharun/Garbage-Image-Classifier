@@ -1,0 +1,7 @@
+python-dotenv
+pillow
+streamlit
+dagshub
+mlflow
+opencv-python
+tensorflow

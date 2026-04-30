@@ -59,7 +59,7 @@ Run the following commands
 
 Paste the following code
 
-<code>
+```
 map $http_upgrade $connection_upgrade {
     default upgrade;
     '' close;
@@ -89,5 +89,5 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 }
-<code>
+```
 

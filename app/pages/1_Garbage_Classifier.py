@@ -44,19 +44,20 @@ mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME"])
 # ----------------------------------------------------------------------
 
 @st.cache_resource
-def load_challenger_models():
+def load_champion_models():
     prod_models = ['ResNet50_Garbage_Classifier']
     models = []
 
     for model in prod_models:
-        model_uri = f"models:/{model}@challenger"
+        model_uri = f"models:/{model}@champion"
         loaded_model = mlflow.pyfunc.load_model(model_uri)
         models.append(loaded_model)
 
+
+
     return models
 
-with st.spinner("Loading Models..."):
-    loaded_models = load_challenger_models()
+loaded_models = load_champion_models()
 
 
 

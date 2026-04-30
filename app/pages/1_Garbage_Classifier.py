@@ -6,6 +6,7 @@ import json
 from dotenv import load_dotenv
 import dagshub
 import mlflow
+from mlflow.tracking import MlflowClient
 
 st.set_page_config(
     page_title='Classifier',
@@ -40,28 +41,31 @@ mlflow.set_tracking_uri(
 )
 mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME"])
 
-
+client = MlflowClient()
 
 
 # ----------------------------------------------------------------------
 # Load the champion models from MLflow and cache it for Streamlit
 # ----------------------------------------------------------------------
 
-@st.cache_resource
+
+@st.cache_resource(ttl=3600)  # Cache for 1 hour
 def load_champion_models():
     prod_models = ['ResNet50_Garbage_Classifier']
     models = []
+    model_versions = []
 
     for model in prod_models:
         model_uri = f"models:/{model}@champion"
         loaded_model = mlflow.pyfunc.load_model(model_uri)
+        model_version = client.get_model_version_by_alias(name=model, alias="champion").version
         models.append(loaded_model)
+        model_versions.append(model_version)
+        
 
+    return prod_models, models, model_version
 
-
-    return models
-
-loaded_models = load_champion_models()
+model_names, loaded_models, model_versions = load_champion_models()
 
 
 
@@ -84,36 +88,32 @@ with st.container():
 
 if submit_button:
     if image_file is not None:
-        with st.spinner("Classifying..."):
-            img = Image.open(image_file)
-            img_resized = img.resize((180, 180))
-            img_array = np.array(img_resized)
-            img_array = np.expand_dims(img_array, axis=0)
+        with st.container(border=True):
+            with st.spinner("Classifying..."):
+                img = Image.open(image_file)
+                img_resized = img.resize((180, 180))
+                img_array = np.array(img_resized)
+                img_array = np.expand_dims(img_array, axis=0)
 
-            predictions = []
+                predictions = []
 
-            for model in loaded_models:
-                prediction = model.predict(img_array)
-                y_pred = np.argmax(prediction, axis=1)[0]
-                pred_label = class_names[y_pred]
-                predictions.append(pred_label)
+                for model in loaded_models:
+                    prediction = model.predict(img_array)
+                    y_pred = np.argmax(prediction, axis=1)[0]
+                    pred_label = class_names[y_pred]
+                    predictions.append(pred_label)
 
-        col1, col2 = st.columns([1, 1], gap="large")
+            col1, col2 = st.columns([1, 1], gap="large")
 
-        with col1:
-            st.subheader("Uploaded Image")
-            st.image(image_file)
+            with col1:
+                st.subheader("Uploaded Image")
+                st.image(image_file)
 
-        with col2:
-            st.subheader("Classification Result")
-            st.success(f"Predicted: **{predictions[0]}**")
-            # Optional: Display top predictions or confidence if available
-            # For example, if prediction is probabilities:
-            # probs = prediction[0]
-            # top_indices = np.argsort(probs)[-3:][::-1]  # Top 3
-            # st.write("Top Predictions:")
-            # for i in top_indices:
-            #     st.write(f"{class_names[i]}: {probs[i]*100:.2f}%")
+            with col2:
+                st.subheader("Classification Result")
+                st.success(f"Predicted: **{predictions[0]}**")
+                st.write("Model used for prediction:")
+                st.info(f"{model_names[0]} Version{model_versions[0]}")
 
     else:
         st.error("Please upload an image to classify.")

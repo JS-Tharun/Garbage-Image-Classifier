@@ -14,4 +14,4 @@
 
 ## Create EC2 instance in AWS
 1. Launch new instance
-*  
+-   

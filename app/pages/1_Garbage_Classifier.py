@@ -49,7 +49,7 @@ client = MlflowClient()
 # ----------------------------------------------------------------------
 
 
-@st.cache_resource(ttl=1800)  # Cache for 1 hour
+@st.cache_resource()  
 def load_champion_models():
     prod_models = ['ResNet50_Garbage_Classifier']
     models = []

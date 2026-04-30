@@ -103,7 +103,10 @@ To ensure reproducibility, experiment comparison, and proper model management, t
 ### `.env` variables to setup
 
 `MLFLOW_USERNAME` - Dagshub Username
+
 `MLFLOW_PASSWORD` - Dagshub Password Token
+
 `MLFLOW_EXPERIMENT_NAME` - Garbage Image Classifier
+
 `MLFLOW_TRACKING_URI` - Dagshub MLFlow Tracking URI
 

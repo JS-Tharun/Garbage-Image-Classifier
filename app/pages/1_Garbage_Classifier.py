@@ -6,7 +6,6 @@ import json
 from dotenv import load_dotenv
 import dagshub
 import mlflow
-import tensorflow
 
 st.set_page_config(
     page_title='Classifier',
@@ -33,7 +32,12 @@ load_dotenv()
 os.environ['MLFLOW_TRACKING_USERNAME'] = f"{os.getenv('MLFLOW_USERNAME')}"
 os.environ['MLFLOW_TRACKING_PASSWORD'] = f"{os.getenv('MLFLOW_PASSWORD')}"
 
-mlflow.set_tracking_uri(os.environ['MLFLOW_TRACKING_URI'])
+username = os.getenv("MLFLOW_USERNAME")
+password = os.getenv("MLFLOW_PASSWORD")
+
+mlflow.set_tracking_uri(
+    f"https://{username}:{password}@dagshub.com/JS-Tharun/Garbage-Image-Classifier.mlflow"
+)
 mlflow.set_experiment(os.environ["MLFLOW_EXPERIMENT_NAME"])
 
 

@@ -1,0 +1,6 @@
+dagshub==0.7.0
+opencv-python==4.13.0.92
+python-dotenv==1.2.2
+Pillow==9.5.0
+streamlit==1.56.0
+

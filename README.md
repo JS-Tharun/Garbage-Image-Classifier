@@ -99,3 +99,11 @@ The goal of this project is to assist in automating waste segregation, improving
 
 To ensure reproducibility, experiment comparison, and proper model management, this project integrates MLflow with DagsHub for tracking experiments, metrics, and artifacts.
 
+
+### `.env` variables to setup
+
+`MLFLOW_USERNAME` - Dagshub Username
+`MLFLOW_PASSWORD` - Dagshub Password Token
+`MLFLOW_EXPERIMENT_NAME` - Garbage Image Classifier
+`MLFLOW_TRACKING_URI` - Dagshub MLFlow Tracking URI
+

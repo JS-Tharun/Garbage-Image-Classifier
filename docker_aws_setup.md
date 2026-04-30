@@ -1,3 +1,5 @@
+# Hosting a streamlit app in AWS with HTTPS
+
 ## Dockerize streamlit app
 
 1. Open streamlit app folder
@@ -47,7 +49,7 @@ Run the following commands
 - `nano .env` - paste the local env files used here
 - `cat .env` - to check if the file is written and saved
 
-4. Install nginx and certbot for 
+4. Install nginx and certbot
 
 - Install nginx: `sudo apt-get install nginx -y`
 - Install the certbot: `sudo apt install certbot -y`
@@ -70,16 +72,16 @@ upstream backend {
 }
 server {
     listen 80;
-    server_name [garbageclassifier.duckdns.org](http://garbageclassifier.duckdns.org);
+    server_name [website_domain](website_url);
     location / {
         return 301 https://$host$request_uri;
     }
 }
 server {
     listen 443 ssl;
-    server_name [garbageclassifier.duckdns.org](http://garbageclassifier.duckdns.org);
-    ssl_certificate /etc/letsencrypt/live/garbageclassifier.duckdns.org/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/garbageclassifier.duckdns.org/privkey.pem;
+    server_name [website_domain](website_url);
+    ssl_certificate /etc/letsencrypt/live/website_domain/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/website_domain/privkey.pem;
     location / {
         proxy_pass http://backend;
         proxy_http_version 1.1;
@@ -90,4 +92,22 @@ server {
     }
 }
 ```
+Example: website_domain: garbageclassifier.duckdns.org, website_url: http://garbageclassifier.duckdns.org
 
+- Verify nginx config is valid `sudo nginx -t`
+- Restart your nginx server `sudo service nginx restart`
+- Check nginx is actually running and listening on 443 `sudo ss -tlnp | grep ':443'`
+
+5. Run Docker Container
+
+- `docker run --env-file .env -d -p 8501:8501 --name container_name repository_name`
+
+6. Dagshub Authentication (if used)
+
+After running the docker container,
+
+- Obtain Container ID `docker ps`
+- Get the logs of docker to get the authentication link `docker logs Container ID`
+- Incase of link not showing up, try changing pages or reloading and run the previous cmd again. The authentication url can show up.
+
+If the authentication fails due to API, then try getting a new password token and update the .env file.

@@ -9,7 +9,7 @@ st.title("♻️ Garbage Classification System")
 
 st.markdown("---")
 
-st.header("📌 Problem Statement")
+
 st.write(
     """
     Waste management is a critical global challenge. Improper segregation of garbage 
@@ -65,9 +65,7 @@ st.write(
     """
     This application consists of two main pages:
 
-    **1. Introduction**
-    - Overview of the project
-    - Problem statement and solution
+    **1. Introduction and Overview**
 
     **2. Garbage Classifier**
     - Upload an image

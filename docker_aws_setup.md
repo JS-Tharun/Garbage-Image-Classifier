@@ -72,16 +72,18 @@ upstream backend {
 }
 server {
     listen 80;
-    server_name [website_domain](website_url);
+    server_name [garbageclassifier.duckdns.org](http://garbageclassifier.duckdns.org);
+    client_max_body_size 50M;
     location / {
         return 301 https://$host$request_uri;
     }
 }
 server {
     listen 443 ssl;
-    server_name [website_domain](website_url);
-    ssl_certificate /etc/letsencrypt/live/website_domain/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/website_domain/privkey.pem;
+    server_name [garbageclassifier.duckdns.org](http://garbageclassifier.duckdns.org);
+    client_max_body_size 50M;
+    ssl_certificate /etc/letsencrypt/live/garbageclassifier.duckdns.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/garbageclassifier.duckdns.org/privkey.pem;
     location / {
         proxy_pass http://backend;
         proxy_http_version 1.1;

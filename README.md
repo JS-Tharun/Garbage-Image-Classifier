@@ -1,4 +1,7 @@
 # ♻️ Garbage Image Classification
+
+Website Link: [Garbage Classifier](https://garbageclassifier.duckdns.org/)
+
 ### 📌 About the Project
 
 Garbage Image Classification is a deep learning-based application designed to automatically identify and categorize waste materials from images. The system classifies waste into categories such as:

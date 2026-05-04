@@ -82,7 +82,8 @@ with st.container():
         image_file = st.file_uploader(
             "Choose an image file",
             type=["jpg", "jpeg", "png"],
-            help="Supported formats: JPG, JPEG, PNG"
+            help="Supported formats: JPG, JPEG, PNG",
+            max_upload_size=50
         )
         submit_button = st.form_submit_button(label="🔍 Classify Garbage")
 
